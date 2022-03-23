@@ -4,35 +4,31 @@ using UnityEngine;
 
 public class LookAtBall : MonoBehaviour
 {
-    private GameObject ball;
-    [SerializeField] private float MinBallPos;
+    private Transform ball;
+    private float speed = 6;
 
     private void Start()
     {
-        ball = GameObject.Find("Ball");
-        MinBallPos = ball.transform.position.y;
+        ball = GameObject.Find("Ball").transform;
     }
 
     private void LateUpdate()
     {
-        if (ball.transform.position.y < MinBallPos)
+        if (ball.position.y - transform.position.y > 5) MoveToBall();
+
+        if (ball.transform.position.y + .3f < transform.position.y)
         {
-            MinBallPos = ball.transform.position.y;
+            transform.position = new Vector3(transform.position.x, transform.position.y - speed * Time.deltaTime , transform.position.z);
         }
 
-        if (MinBallPos + 0.9f < transform.position.y)
+        if (ball.transform.position.y + 1f > transform.position.y)
         {
-            Vector3 pos = transform.position;
-            pos.y = transform.position.y - 0.09f;
-            transform.position = pos;
+            transform.position = new Vector3(transform.position.x, transform.position.y + speed * Time.deltaTime, transform.position.z);
         }
+    }
 
-        if (ball.transform.position.y > transform.position.y + 0.2f)
-        {
-            MinBallPos = ball.transform.position.y;
-            Vector3 pos = transform.position;
-            pos.y = transform.position.y + 1f;
-            transform.position = pos;
-        }
+    private void MoveToBall()
+    {
+        transform.position = new Vector3(transform.position.x, ball.position.y, transform.position.z);
     }
 }
